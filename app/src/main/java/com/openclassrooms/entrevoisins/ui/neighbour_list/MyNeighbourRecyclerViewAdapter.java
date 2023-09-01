@@ -1,6 +1,9 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,12 +48,35 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mNeighbourAvatar);
 
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Neighbour selectedNeighbour = mNeighbours.get(position);
+
+                // Créer un Intent pour ouvrir NeighbourDetailActivity
+                Intent intent = new Intent(view.getContext(), NeighbourDetailActivity.class);
+
+                // Transmettre les données du voisin à NeighbourDetailActivity
+                intent.putExtra("neighbourId", selectedNeighbour.getId());
+                intent.putExtra("neighbourName", selectedNeighbour.getName());
+                intent.putExtra("neighbourAvatarUrl", selectedNeighbour.getAvatarUrl());
+                intent.putExtra("neighbourAddress", selectedNeighbour.getAddress());
+                intent.putExtra("neighbourPhoneNumber", selectedNeighbour.getPhoneNumber());
+                intent.putExtra("neighbourAboutMe", selectedNeighbour.getAboutMe());
+
+                view.getContext().startActivity(intent);
+            }
+        });
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
             }
         });
+
+
+
     }
 
     @Override
@@ -66,9 +92,14 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
         @BindView(R.id.item_list_delete_button)
         public ImageButton mDeleteButton;
 
+        public View mView;
+
+
         public ViewHolder(View view) {
             super(view);
+            mView = view;
             ButterKnife.bind(this, view);
+
         }
     }
 }

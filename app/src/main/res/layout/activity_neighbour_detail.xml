@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F2"
+    tools:context=".ui.neighbour_list.NeighbourDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <!-- Conteneur pour l'image d'avatar et le bouton favori -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="248dp"
+                android:background="#FFFFFF"
+                android:elevation="4dp"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|top"
+                    android:layout_margin="0dp"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#090909"
+                    app:borderWidth="0dp"
+                    app:fabSize="normal"
+                    app:rippleColor="#FC0474BD"
+                    app:srcCompat="@drawable/arrow_left_solid"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/neighbour_avatar_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/favorite_neighbour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:backgroundTint="#FFFFFE"
+                    app:srcCompat="@drawable/ic_star_white_24dp" />
+            </FrameLayout>
+
+            <!-- Conteneur pour les informations nom, téléphone et adresse -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:elevation="4dp"
+                android:layout_marginBottom="8dp"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/neighbour_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Nom"
+                    android:textSize="24dp"
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/location_dot_solid" />
+
+                    <TextView
+                        android:id="@+id/neighbour_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Adresse"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/phone_solid"
+                        android:layout_gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/neighbour_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Téléphone"
+                        android:textAlignment="center"
+                        android:layout_marginStart="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/globe_solid"
+                        android:layout_gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/neighbour_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nom"
+                        android:textAlignment="center"
+                        android:layout_marginStart="16dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Conteneur "À propos de moi" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:elevation="4dp"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/about_me_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="À propos de moi"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_gravity="start"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/neighbour_about_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="About Me"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

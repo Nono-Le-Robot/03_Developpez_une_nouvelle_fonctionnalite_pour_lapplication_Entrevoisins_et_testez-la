@@ -20,6 +20,10 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
         return neighbours;
     }
 
+    public Neighbour getNeighbour(int position) {
+        return neighbours.get(position);
+    }
+
     /**
      * {@inheritDoc}
      */

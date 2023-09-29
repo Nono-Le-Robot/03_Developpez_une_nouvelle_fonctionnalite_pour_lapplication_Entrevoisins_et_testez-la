@@ -1,34 +1,34 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
+import com.openclassrooms.entrevoisins.service.FavoriteListManager;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 public class NeighbourDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
-//        ButterKnife.bind(this);
         setContentView(R.layout.activity_neighbour_detail);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        // Récupérer les données transmises depuis l'Intent
         Intent intent = getIntent();
         if (intent != null) {
             String neighbourId = intent.getStringExtra("neighbourId");
@@ -37,13 +37,6 @@ public class NeighbourDetailActivity extends AppCompatActivity {
             String neighbourAddress= intent.getStringExtra("neighbourAddress");
             String neighbourPhoneNumber = intent.getStringExtra("neighbourPhoneNumber");
             String neighbourAboutMe = intent.getStringExtra("neighbourAboutMe");
-
-            Log.d("nId", " " + neighbourId);
-            Log.d("nName", " " + neighbourName);
-            Log.d("nAvatarUrl", " " + neighbourAvatarUrl);
-            Log.d("nAddress", " " + neighbourAddress);
-            Log.d("nPhoneNumber", " " + neighbourPhoneNumber);
-            Log.d("nAboutMe", " " + neighbourAboutMe);
 
             ImageView avatarUrl;
             TextView nameField;
@@ -84,11 +77,45 @@ public class NeighbourDetailActivity extends AppCompatActivity {
                 }
             });
 
+            // ici verifier si l'utilisateur est deja en favoris et metttre l'icone en jaune si c'est le cas
+            // on recupére l'icone
+            ImageView favIcon = findViewById(R.id.favorite_neighbour);
+            // on recupére la liste des favoris
+            List<String> favList = FavoriteListManager.getInstance().getFavoriteList();
+            //on verifie si l'id est present
+            if (favList.contains(neighbourId)) {
+                // on met l'icone en jaune
+                favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(),R.color.yellow), PorterDuff.Mode.SRC_IN);
+            }
+            else{
+                // icone gris
+                favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(),R.color.gray), PorterDuff.Mode.SRC_IN);
+            }
 
+            // listener pour le click sur le btn favoris
+            FloatingActionButton favButton = findViewById(R.id.favorite_neighbour);
+            favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView favIcon = findViewById(R.id.favorite_neighbour);
+                    // Vérifier si l'ID est déjà présent dans l'array pour éviter les doublons
+                    if (!FavoriteListManager.getInstance().getFavoriteList().contains(neighbourId)) {
+                        FavoriteListManager.getInstance().addFavorite(neighbourId);
+                        favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.yellow), PorterDuff.Mode.SRC_IN);
+                        // Si l'ajout est réussi, afficher un Toast
+                        Toast.makeText(getApplicationContext(), neighbourName + " ajoutée aux favoris !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Si l'ID est déjà présent dans les favoris, supprimer l'utilisateur des favoris
+                        FavoriteListManager.getInstance().removeFavorite(neighbourId);
+                        favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.gray), PorterDuff.Mode.SRC_IN);
+                        // Afficher un Toast pour indiquer que l'utilisateur a été retiré des favoris
+                        Toast.makeText(getApplicationContext(), neighbourName + " retirée des favoris !", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
+            });
 
-            // Utilisez les données comme bon vous semble, par exemple, pour afficher le nom du voisin.
-            // Assurez-vous d'adapter cela à vos besoins spécifiques.
         }
     }
+
 }

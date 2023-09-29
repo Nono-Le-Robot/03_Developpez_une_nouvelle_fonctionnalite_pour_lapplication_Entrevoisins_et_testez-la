@@ -41,7 +41,8 @@
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_favorites_title" />
+                android:text="@string/tab_favorites_title"
+                />
 
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -59,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_person_add_white_24dp" />
+        app:srcCompat="@drawable/ic_person_add_white_24dp"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,6 +2,7 @@ package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
+import com.openclassrooms.entrevoisins.service.FavoriteListManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,8 +41,13 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
         return new ViewHolder(view);
     }
 
+    @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
+
+
+
         Neighbour neighbour = mNeighbours.get(position);
         holder.mNeighbourName.setText(neighbour.getName());
         Glide.with(holder.mNeighbourAvatar.getContext())
@@ -58,7 +65,7 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 Intent intent = new Intent(view.getContext(), NeighbourDetailActivity.class);
 
                 // Transmettre les données du voisin à NeighbourDetailActivity
-                intent.putExtra("neighbourId", selectedNeighbour.getId());
+                intent.putExtra("neighbourId", String.valueOf(selectedNeighbour.getId()));
                 intent.putExtra("neighbourName", selectedNeighbour.getName());
                 intent.putExtra("neighbourAvatarUrl", selectedNeighbour.getAvatarUrl());
                 intent.putExtra("neighbourAddress", selectedNeighbour.getAddress());

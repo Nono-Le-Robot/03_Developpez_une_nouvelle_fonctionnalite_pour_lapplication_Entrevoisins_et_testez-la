@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,7 +24,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ListNeighbourActivity extends AppCompatActivity {
-
    FloatingActionButton viewDetail;
 
     // UI Components
@@ -35,15 +38,48 @@ public class ListNeighbourActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_neighbour);
         ButterKnife.bind(this);
-
-//        setSupportActionBar(mToolbar);
         mPagerAdapter = new ListNeighbourPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                switch (position) {
+                    case 0:
+                        // Onglet "Voisins" sélectionné, afficher le fragment des voisins.
+                        Toast.makeText(getApplicationContext(),  "Click sur tab voisins", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 1:
+                        // Onglet "Favoris" sélectionné, afficher le fragment des favoris.
+                        Toast.makeText(getApplicationContext(),  "Click sur tab favoris", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+
+        });
+
+
+
+
     }
 
     @OnClick(R.id.add_neighbour)

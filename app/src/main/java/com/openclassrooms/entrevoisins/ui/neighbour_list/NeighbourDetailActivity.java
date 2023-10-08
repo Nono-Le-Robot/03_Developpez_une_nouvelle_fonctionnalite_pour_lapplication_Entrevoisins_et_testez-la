@@ -42,8 +42,8 @@ public class NeighbourDetailActivity extends AppCompatActivity {
 
             NeighbourApiService mApiService;
             mApiService = DI.getNeighbourApiService();
-            Neighbour selectedNeighbour = mApiService.getNeighbour(neighbourId);
-            List<Neighbour> neighbours = mApiService.getNeighbours();
+            String idToSave = String.valueOf(Integer.parseInt(neighbourId) - 1);
+            Neighbour selectedNeighbour = mApiService.getNeighbour(idToSave);
             List<Neighbour> allFavs = mApiService.getAllFavorite();
             Boolean isFavorite = selectedNeighbour.getFavorite();
             ImageView favIcon = findViewById(R.id.favorite_neighbour);
@@ -103,22 +103,16 @@ public class NeighbourDetailActivity extends AppCompatActivity {
             favButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println(neighbourId);
-
                      if(isFavorite){
                          selectedNeighbour.removeFavorite();
-                         favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.yellow), PorterDuff.Mode.SRC_IN);
-
+                         favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.gray), PorterDuff.Mode.SRC_IN);
+                         Toast.makeText(getApplicationContext(),  neighbourName + " a été retiré(e) à vos favoris", Toast.LENGTH_SHORT).show();
                      }
                      else{
                          selectedNeighbour.addFavorite();
                          favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.yellow), PorterDuff.Mode.SRC_IN);
-
+                         Toast.makeText(getApplicationContext(),  neighbourName + " a été ajouté(e) de vos favoris", Toast.LENGTH_SHORT).show();
                      }
-
-
-
-
                     ImageView favIcon = findViewById(R.id.favorite_neighbour);
                     // Vérifier si l'ID est déjà présent dans l'array pour éviter les doublons
 

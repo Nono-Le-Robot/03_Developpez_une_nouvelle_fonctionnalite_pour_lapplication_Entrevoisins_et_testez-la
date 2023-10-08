@@ -45,11 +45,11 @@ public class NeighbourDetailActivity extends AppCompatActivity {
             String idToSave = String.valueOf(Integer.parseInt(neighbourId) - 1);
             Neighbour selectedNeighbour = mApiService.getNeighbour(idToSave);
             List<Neighbour> allFavs = mApiService.getAllFavorite();
-            Boolean isFavorite = selectedNeighbour.getFavorite();
+            Boolean currentFav = selectedNeighbour.getFavorite();
             ImageView favIcon = findViewById(R.id.favorite_neighbour);
             // ici on récupére bien la liste des utilisateur ajoutés en favoris.
             System.out.println(allFavs);
-            if (isFavorite) {
+            if (currentFav) {
                 // on met l'icone en jaune
                 favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(),R.color.yellow), PorterDuff.Mode.SRC_IN);
             }
@@ -103,6 +103,7 @@ public class NeighbourDetailActivity extends AppCompatActivity {
             favButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Boolean isFavorite = selectedNeighbour.getFavorite();
                      if(isFavorite){
                          selectedNeighbour.removeFavorite();
                          favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.gray), PorterDuff.Mode.SRC_IN);
@@ -114,8 +115,6 @@ public class NeighbourDetailActivity extends AppCompatActivity {
                          Toast.makeText(getApplicationContext(),  neighbourName + " a été ajouté(e) de vos favoris", Toast.LENGTH_SHORT).show();
                      }
                     ImageView favIcon = findViewById(R.id.favorite_neighbour);
-                    // Vérifier si l'ID est déjà présent dans l'array pour éviter les doublons
-
                 }
 
             });

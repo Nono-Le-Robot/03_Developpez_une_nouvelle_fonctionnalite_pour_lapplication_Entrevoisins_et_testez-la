@@ -25,6 +25,10 @@ public class Neighbour {
     /** About me */
     private String aboutMe;
 
+    /** About me */
+
+    private Boolean isFavorite;
+
     /**
      * Constructor
      * @param id
@@ -39,6 +43,7 @@ public class Neighbour {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
+        this.isFavorite = false;
     }
 
     public long getId() {
@@ -87,6 +92,18 @@ public class Neighbour {
 
     public void setAboutMe(String aboutMe) {
         this.aboutMe = aboutMe;
+    }
+
+    public void addFavorite() {
+        this.isFavorite = true;
+    }
+
+    public void removeFavorite(){
+        this.isFavorite = false;
+    }
+
+    public Boolean getFavorite(){
+        return this.isFavorite;
     }
 
     @Override

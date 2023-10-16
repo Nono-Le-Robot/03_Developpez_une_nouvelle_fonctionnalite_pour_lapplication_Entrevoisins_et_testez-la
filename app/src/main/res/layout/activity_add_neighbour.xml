@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.neighbour_list.AddNeighbourActivity">
+    tools:context=".ui.neighbour_list.AddNeighbourActivity"
+    android:id="@+id/add_neighbour_activity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -53,7 +53,9 @@ public class ListNeighbourActivity extends AppCompatActivity {
                     case 0:
                         // Onglet "Voisins" sélectionné, afficher le fragment des voisins.
                         Toast.makeText(getApplicationContext(),  "Click sur tab voisins", Toast.LENGTH_SHORT).show();
+
                         mViewPager.setCurrentItem(0);
+
 
                         break;
                     case 1:

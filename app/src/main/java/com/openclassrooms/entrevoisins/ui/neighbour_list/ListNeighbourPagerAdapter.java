@@ -18,7 +18,7 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
-        //TODO: pourquoi ca n'affiche pas l'icode favoris ?
+        //TODO: pourquoi ca n'affiche pas l'icon favoris ?
         if (position == 0) {
             return NeighbourFragment.newInstance();
         } else {

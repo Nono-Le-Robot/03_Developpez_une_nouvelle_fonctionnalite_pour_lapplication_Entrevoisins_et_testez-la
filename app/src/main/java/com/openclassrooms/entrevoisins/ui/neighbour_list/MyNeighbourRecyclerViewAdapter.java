@@ -35,7 +35,7 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
+        //TODO:
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_neighbour, parent, false);
         
@@ -45,10 +45,6 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
     @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
-
-
-
         Neighbour neighbour = mNeighbours.get(position);
         holder.mNeighbourName.setText(neighbour.getName());
         Glide.with(holder.mNeighbourAvatar.getContext())

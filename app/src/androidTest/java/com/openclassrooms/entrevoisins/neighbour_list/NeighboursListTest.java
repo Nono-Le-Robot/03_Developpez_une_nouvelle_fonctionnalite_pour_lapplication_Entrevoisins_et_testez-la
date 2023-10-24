@@ -1,10 +1,15 @@
 
 package com.openclassrooms.entrevoisins.neighbour_list;
 
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
@@ -23,7 +28,9 @@ import org.junit.runner.RunWith;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
@@ -33,6 +40,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.hamcrest.core.IsNull.notNullValue;
+
+import android.util.Log;
+
+import java.util.List;
 
 
 /**
@@ -66,11 +77,8 @@ public class NeighboursListTest {
                 .check(matches(hasMinimumChildCount(1)));
     }
 
-
-    //TODO: faire un test pour verifier lajout d'un voisin ?
     @Test
     public void myNeighbourList_shouldCreateItem() throws InterruptedException {
-
         //on vérifie que tout les voisins sont chargés
         onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT));
 
@@ -85,18 +93,24 @@ public class NeighboursListTest {
         String phoneNumber = "00000000";
         String address = "00 test";
         String aboutMe = "description test";
+
         onView(withId(R.id.name)).perform(typeText(name));
         onView(withId(R.id.phoneNumber)).perform(typeText(phoneNumber));
         onView(withId(R.id.address)).perform(typeText(address));
         onView(withId(R.id.aboutMe)).perform(typeText(aboutMe));
-        //TODO: pourquoi ca bloque ici ?
+
+        //on ferme le clavier
+        onView(ViewMatchers.isRoot()).perform(ViewActions.closeSoftKeyboard());
 
         //on clique sur save
         onView(ViewMatchers.withId(R.id.create)).perform(click());
 
+        // on verifie que l'activity list neighbour est bien visible
+        onView(withId(R.id.list_neighbours)).check(matches(isDisplayed()));
+
         //on verifie que le nombre de voisin est bien incrementé
         onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT+1));
-
+        ITEMS_COUNT++;
     }
 
 
@@ -135,10 +149,6 @@ public class NeighboursListTest {
 
         // Vérifier que les valeurs affichés correspond bien aux valeurs attendues
 
-        int idToCompare = 1;
-        //TODO: comment comparer un id quand il sagit dun int non visible sur la page ?
-        //onView(withId(R.id.)).check(matches(withText(String.valueOf(idToCompare)));
-
         NeighbourApiService mApiService;
         mApiService = DI.getNeighbourApiService();
 
@@ -146,9 +156,6 @@ public class NeighboursListTest {
 
         String nameToCompare = neighbourToCompare.getName();
         onView(withText(nameToCompare)).check(matches(isDisplayed()));
-
-        String urlToCompare = neighbourToCompare.getAvatarUrl();
-        //TODO: comment faire quand il sagit de l'url d'une image ?
 
         String addressesToCompare = neighbourToCompare.getAddress();
         onView(withText(addressesToCompare)).check(matches(isDisplayed()));
@@ -161,12 +168,136 @@ public class NeighboursListTest {
 
         String aboutMeToCompare = neighbourToCompare.getAboutMe();
         onView(withText(aboutMeToCompare)).check(matches(isDisplayed()));
+
+        // retourner a l'écran principal
+
     }
 
     @Test
-    public void tabFavoriteDisplayOnlyFavorite(){
-        //TODO: faire le test pour verifier que l'onglet favoris affiche bien uniquement les favoris
+    public void shouldAddAndRemoveNeighbourToFavorite() {
+        NeighbourApiService mApiService;
+        mApiService = DI.getNeighbourApiService();
 
+        // Cliquer sur l'élément à la position 0.
+        onView(ViewMatchers.withId(R.id.list_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Vérifier que l'activité de détail du voisin est bien ouverte.
+        onView(withId(R.id.detail_activity)).check(matches(isDisplayed()));
+
+        //on cliqure sur l'icon favoris
+        onView(withId(R.id.favorite_neighbour)).perform(click());
+
+        //on verifie que l'ajoue c'est bien effectué
+        Neighbour mNeighbour = mApiService.getNeighbour("0");
+        Boolean isFav = mNeighbour.getFavorite();
+        assertTrue(isFav);
+
+        //on quitte la page
+        onView(withId(R.id.detail_activity)).perform(pressBack());
+
+        //on retourne sur la page
+        onView(ViewMatchers.withId(R.id.list_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Vérifier que l'activité de détail du voisin est bien ouverte.
+        onView(withId(R.id.detail_activity)).check(matches(isDisplayed()));
+
+        // on verifie que le voisin est bien resté en favoris
+        isFav = mNeighbour.getFavorite();
+        assertTrue(isFav);
+
+        // on le retire des favoris
+        onView(withId(R.id.favorite_neighbour)).perform(click());
+
+        //on verifie que la suppressiond es favoris a vien fonctionnée
+        isFav = mNeighbour.getFavorite();
+        assertFalse(isFav);
+
+        // on quitte la page
+        onView(withId(R.id.detail_activity)).perform(pressBack());
+
+        //on retourne sur la page
+        onView(ViewMatchers.withId(R.id.list_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Vérifier que l'activité de détail du voisin est bien ouverte.
+        onView(withId(R.id.detail_activity)).check(matches(isDisplayed()));
+
+        // on verifie que le voisin n'est pas en favoris
+        isFav = mNeighbour.getFavorite();
+        assertFalse(isFav);
+    }
+
+
+
+    @Test
+    public void tabFavoriteDisplayOnlyFavorite(){
+        
+        Log.d("debut_main", "test 1 OK");
+
+        //cliquer sur tab "favoris"
+        onView(withText("FAVORIS")).perform(ViewActions.click());
+
+        Log.d("debut_main", "OK");
+
+        //verifier que c'est bien vide
+        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
+        Log.d("debut_main", "test check OK");
+
+        // retourner sur longlet "voisin"
+        onView(withText("MES VOISINS")).perform(ViewActions.click());
+        Log.d("debut_main", "test voisins onglet OK");
+
+        //ouvrir le premier element
+        onView(ViewMatchers.withId(R.id.list_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        Log.d("debut_main", "test click sur voisin");
+
+        //ajoute en favoris
+        onView(withId(R.id.favorite_neighbour)).perform(click());
+        Log.d("debut_main", "ajout au favoris");
+
+        //retour
+        onView(withId(R.id.detail_activity)).perform(pressBack());
+        Log.d("debut_main", "retour arriere");
+
+        //cliquer sur longlet favoris
+        onView(withText("FAVORIS")).perform(click());
+
+
+        //verifier que le voisin est bien present
+        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
+
+
+        // cliquer sur longlet voisins
+        onView(withText("MES VOISINS")).perform(click());
+        Log.d("debut_main", "AVANT BUG");
+
+
+
+
+        //cliquer sur un autre voisin (ex id 3)
+        onView(ViewMatchers.withId(R.id.list_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(3, click()));
+
+        // l'ajouter en favoris
+        onView(withId(R.id.favorite_neighbour)).perform(click());
+
+
+        // retour
+        onView(withId(R.id.detail_activity)).perform(pressBack());
+        Log.d("debut_main", "retour arriere 2");
+
+
+        // clique sur longlet favoris
+        onView(withText("FAVORIS")).perform(click());
+
+
+        // verifier que les 2 voisins sont bien présents
+        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
+
+        // fin
 
     }
 

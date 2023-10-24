@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import android.util.Log;
 
 /**
  * Unit test on Neighbour service
@@ -34,11 +37,19 @@ public class NeighbourServiceTest {
         assertThat(neighbours, IsIterableContainingInAnyOrder.containsInAnyOrder(expectedNeighbours.toArray()));
     }
 
-    //TODO: faire un test unitaire pour verifier si l'ajout fonctionne.
     @Test
     public void deleteNeighbourWithSuccess() {
         Neighbour neighbourToDelete = service.getNeighbours().get(0);
         service.deleteNeighbour(neighbourToDelete);
         assertFalse(service.getNeighbours().contains(neighbourToDelete));
+    }
+
+    @Test
+    public void addNeighbourWithSuccess() {
+        Neighbour neighbourToAdd = new Neighbour(service.getNeighbours().size()+1, "testAddNeighbour","testurlavatar","test address","0000000000","test description");
+        service.createNeighbour(neighbourToAdd);
+        Neighbour expectedNeighbour = service.getNeighbours().get(service.getNeighbours().size()-1);
+        assertTrue(expectedNeighbour.getName() == "testAddNeighbour");
+        assertTrue(service.getNeighbours().contains(neighbourToAdd));
     }
 }

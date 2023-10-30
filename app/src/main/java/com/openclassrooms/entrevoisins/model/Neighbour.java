@@ -28,6 +28,9 @@ public class Neighbour {
     /** About me */
 
     private Boolean isFavorite;
+    private boolean deleteIconVisible;
+
+
 
     /**
      * Constructor
@@ -45,6 +48,14 @@ public class Neighbour {
         this.aboutMe = aboutMe;
         this.isFavorite = false;
     }
+    public void setDeleteIconVisible(boolean deleteIconVisible) {
+        this.deleteIconVisible = deleteIconVisible;
+    }
+
+    public boolean isDeleteIconVisible() {
+        return deleteIconVisible;
+    }
+
 
     public long getId() {
         return id;

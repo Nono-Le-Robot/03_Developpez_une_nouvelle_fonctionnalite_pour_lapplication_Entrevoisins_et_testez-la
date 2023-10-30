@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +57,27 @@ public class NeighbourFragment extends Fragment {
         return view;
     }
 
+    public boolean updateNeighboursList() {
+        initList(); // Rechargez la liste
+        mRecyclerView.getAdapter().notifyDataSetChanged(); // Notifiez l'adaptateur que les données ont changé
+        return false;
+    }
     /**
      * Init the List of neighbours
      */
     private void initList() {
+        //TODO: a relaoad au click sur tab ?
         mNeighbours = mApiService.getNeighbours();
+        int tabPos = mApiService.getTabPosition();
+
+        Log.d("test_test_test", String.valueOf(tabPos));
+        for (Neighbour neighbour : mNeighbours) {
+            if(tabPos == 0){
+
+                neighbour.setDeleteIconVisible(true); // Masquer l'icône de suppression pour les voisins favoris
+            }
+            else neighbour.setDeleteIconVisible(false);
+        }
         mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours));
     }
 

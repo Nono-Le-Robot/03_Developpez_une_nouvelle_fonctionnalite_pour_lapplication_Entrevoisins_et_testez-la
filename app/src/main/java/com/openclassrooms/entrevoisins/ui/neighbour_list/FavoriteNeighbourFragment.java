@@ -2,6 +2,7 @@ package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +57,23 @@ public class FavoriteNeighbourFragment extends Fragment {
         return view;
     }
 
+    public void updateFavoriteNeighboursList() {
+        initList(); // Rechargez la liste
+        mRecyclerView.getAdapter().notifyDataSetChanged(); // Notifiez l'adaptateur que les données ont changé
+    }
+
     /**
      * Init the List of neighbours
      */
     private void initList() {
         mNeighbours = mApiService.getAllFavorite();
+        int tabPos = mApiService.getTabPosition();
+        for (Neighbour neighbour : mNeighbours) {
+        if(tabPos == 0){
+            neighbour.setDeleteIconVisible(true); // Masquer l'icône de suppression pour les voisins favoris
+        }
+        else neighbour.setDeleteIconVisible(false);
+        }
         mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours));
     }
 

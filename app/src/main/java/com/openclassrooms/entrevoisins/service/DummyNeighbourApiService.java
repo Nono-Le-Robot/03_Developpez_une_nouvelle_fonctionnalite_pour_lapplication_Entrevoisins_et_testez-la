@@ -12,6 +12,7 @@ import java.util.List;
 public class DummyNeighbourApiService implements  NeighbourApiService {
 
     private List<Neighbour> neighbours = DummyNeighbourGenerator.generateNeighbours();
+    private int tabPosition = 0;
 
 
     /**
@@ -25,6 +26,14 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
 
     public Neighbour getNeighbour(String position) {
         return neighbours.get(Integer.parseInt(position));
+    }
+
+    public int getTabPosition(){
+        return tabPosition;
+    }
+
+    public void setTabPosition(int position){
+        tabPosition = position;
     }
 
     public List<Neighbour> getAllFavorite() {

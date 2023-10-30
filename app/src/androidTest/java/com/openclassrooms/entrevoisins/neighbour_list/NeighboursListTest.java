@@ -7,6 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -51,6 +52,7 @@ import java.util.List;
  */
 @RunWith(AndroidJUnit4.class)
 public class NeighboursListTest {
+    private NeighbourApiService service;
 
     // This is fixed
     private static int ITEMS_COUNT = 12;
@@ -63,6 +65,7 @@ public class NeighboursListTest {
 
     @Before
     public void setUp() {
+            service = DI.getNewInstanceApiService();
         mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
     }
@@ -233,49 +236,31 @@ public class NeighboursListTest {
 
     @Test
     public void tabFavoriteDisplayOnlyFavorite(){
-        
-        Log.d("debut_main", "test 1 OK");
-
-        //cliquer sur tab "favoris"
-        onView(withText("FAVORIS")).perform(ViewActions.click());
-
-        Log.d("debut_main", "OK");
+        int favoriteLength;
 
         //verifier que c'est bien vide
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
-        Log.d("debut_main", "test check OK");
-
-        // retourner sur longlet "voisin"
-        onView(withText("MES VOISINS")).perform(ViewActions.click());
-        Log.d("debut_main", "test voisins onglet OK");
+        favoriteLength = service.getAllFavorite().size();
+        assertEquals(0, favoriteLength);
 
         //ouvrir le premier element
         onView(ViewMatchers.withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        Log.d("debut_main", "test click sur voisin");
 
         //ajoute en favoris
         onView(withId(R.id.favorite_neighbour)).perform(click());
-        Log.d("debut_main", "ajout au favoris");
 
         //retour
         onView(withId(R.id.detail_activity)).perform(pressBack());
-        Log.d("debut_main", "retour arriere");
 
         //cliquer sur longlet favoris
         onView(withText("FAVORIS")).perform(click());
 
-
         //verifier que le voisin est bien present
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
-
+        favoriteLength = service.getAllFavorite().size();
+        assertEquals(1, favoriteLength);
 
         // cliquer sur longlet voisins
         onView(withText("MES VOISINS")).perform(click());
-        Log.d("debut_main", "AVANT BUG");
-
-
-
 
         //cliquer sur un autre voisin (ex id 3)
         onView(ViewMatchers.withId(R.id.list_neighbours))
@@ -284,18 +269,15 @@ public class NeighboursListTest {
         // l'ajouter en favoris
         onView(withId(R.id.favorite_neighbour)).perform(click());
 
-
         // retour
         onView(withId(R.id.detail_activity)).perform(pressBack());
-        Log.d("debut_main", "retour arriere 2");
-
 
         // clique sur longlet favoris
         onView(withText("FAVORIS")).perform(click());
 
-
         // verifier que les 2 voisins sont bien présents
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(12));
+        favoriteLength = service.getAllFavorite().size();
+        assertEquals(2, favoriteLength);
 
         // fin
 

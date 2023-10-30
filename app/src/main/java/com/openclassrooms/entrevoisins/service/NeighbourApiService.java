@@ -18,6 +18,10 @@ public interface NeighbourApiService {
 
     Neighbour getNeighbour(String id);
 
+    int getTabPosition();
+
+     void setTabPosition(int position);
+
     List<Neighbour> getAllFavorite();
 
     /**

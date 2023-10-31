@@ -81,8 +81,9 @@ public class AddNeighbourActivity extends AppCompatActivity {
 
     @OnClick(R.id.create)
     void addNeighbour() {
+        int newId = mApiService.getNeighbours().size() + 1;
         Neighbour neighbour = new Neighbour(
-                System.currentTimeMillis(),
+                newId,
                 nameInput.getEditText().getText().toString(),
                 mNeighbourImage,
                 addressInput.getEditText().getText().toString(),

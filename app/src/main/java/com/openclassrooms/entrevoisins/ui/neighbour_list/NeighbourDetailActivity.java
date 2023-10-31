@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class NeighbourDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_neighbour_detail);
         Intent intent = getIntent();
         if (intent != null) {
+
+
             String neighbourId = intent.getStringExtra("neighbourId");
             String neighbourName = intent.getStringExtra("neighbourName");
             String neighbourAvatarUrl = intent.getStringExtra("neighbourAvatarUrl");
@@ -40,8 +43,10 @@ public class NeighbourDetailActivity extends AppCompatActivity {
             String neighbourPhoneNumber = intent.getStringExtra("neighbourPhoneNumber");
             String neighbourAboutMe = intent.getStringExtra("neighbourAboutMe");
 
+
             NeighbourApiService mApiService;
             mApiService = DI.getNeighbourApiService();
+            List<Neighbour> test = mApiService.getNeighbours();
             String idToSave = String.valueOf(Integer.parseInt(neighbourId) - 1);
             Neighbour selectedNeighbour = mApiService.getNeighbour(idToSave);
             List<Neighbour> allFavs = mApiService.getAllFavorite();

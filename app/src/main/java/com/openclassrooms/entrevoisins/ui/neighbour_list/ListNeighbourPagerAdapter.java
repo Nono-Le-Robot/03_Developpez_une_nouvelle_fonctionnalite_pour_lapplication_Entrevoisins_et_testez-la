@@ -4,12 +4,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.model.Neighbour;
+import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+
+import java.util.List;
+
 
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
     public ListNeighbourPagerAdapter(FragmentManager fm) {
         super(fm);
     }
+
+
+
 
     /**
      * getItem is called to instantiate the fragment for the given page.
@@ -18,7 +27,6 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
-        //TODO: pourquoi ca n'affiche pas l'icon favoris ?
         if (position == 0) {
             return NeighbourFragment.newInstance();
         } else {

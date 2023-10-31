@@ -38,13 +38,16 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        //TODO:
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_neighbour, parent, false);
-        
+
         return new ViewHolder(view);
     }
+
+    public void updateData(List<Neighbour> neighbours) {
+        notifyDataSetChanged();
+    }
+
 
     @SuppressLint("RecyclerView")
     @Override
@@ -58,11 +61,14 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 .into(holder.mNeighbourAvatar);
         int tabPos = mApiService.getTabPosition();
         // Vérifiez si l'icône de suppression doit être visible ou non
-        if (neighbour.isDeleteIconVisible() ) {
-            holder.mDeleteButton.setVisibility(View.VISIBLE);
+        int tabPosition = mApiService.getTabPosition();
+        if (neighbour.getFavorite() && tabPosition == 1) {
+            holder.mDeleteButton.setVisibility(View.GONE);
         } else{
-             holder.mDeleteButton.setVisibility(View.GONE);
+             holder.mDeleteButton.setVisibility(View.VISIBLE);
         }
+
+
 
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

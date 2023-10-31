@@ -57,11 +57,6 @@ public class FavoriteNeighbourFragment extends Fragment {
         return view;
     }
 
-    public void updateFavoriteNeighboursList() {
-        initList(); // Rechargez la liste
-        mRecyclerView.getAdapter().notifyDataSetChanged(); // Notifiez l'adaptateur que les données ont changé
-    }
-
     /**
      * Init the List of neighbours
      */
@@ -69,10 +64,9 @@ public class FavoriteNeighbourFragment extends Fragment {
         mNeighbours = mApiService.getAllFavorite();
         int tabPos = mApiService.getTabPosition();
         for (Neighbour neighbour : mNeighbours) {
-        if(tabPos == 0){
-            neighbour.setDeleteIconVisible(true); // Masquer l'icône de suppression pour les voisins favoris
-        }
-        else neighbour.setDeleteIconVisible(false);
+            if(tabPos == 1){
+                neighbour.setDeleteIconVisible(false);
+            }
         }
         mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours));
     }

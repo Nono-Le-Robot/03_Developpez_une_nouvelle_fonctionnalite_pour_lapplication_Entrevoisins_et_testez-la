@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,6 +32,11 @@ import butterknife.OnClick;
 
 public class ListNeighbourActivity extends AppCompatActivity {
     private ImageButton deleteButton;
+    private List<Neighbour> mNeighbours;
+
+    private RecyclerView mRecyclerView;
+
+    int tabPos;
 
 
 
@@ -48,8 +54,6 @@ public class ListNeighbourActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_neighbour);
         ButterKnife.bind(this);
@@ -57,36 +61,45 @@ public class ListNeighbourActivity extends AppCompatActivity {
         mPagerAdapter = new ListNeighbourPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        MyNeighbourRecyclerViewAdapter mAdapter = new MyNeighbourRecyclerViewAdapter(mNeighbours);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {MyNeighbourRecyclerViewAdapter mAdapter = new MyNeighbourRecyclerViewAdapter(mNeighbours);
+
+
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //TODO: comment appeler le reload ?
-                deleteButton = mViewPager.findViewById(R.id.item_list_delete_button);
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-
-                        // Onglet "Voisins" sélectionné, afficher le fragment des voisins
-                        mApiService.setTabPosition(0);
                         mViewPager.setCurrentItem(0);
+                        mApiService.setTabPosition(0);
+                        mNeighbours = mApiService.getNeighbours();
+                        mAdapter.updateData(mNeighbours);
+                        mPagerAdapter.notifyDataSetChanged();
                         break;
                     case 1:
-                        // Onglet "Favoris" sélectionné, afficher le fragment des favoris.
-                        mApiService.setTabPosition(1);
                         mViewPager.setCurrentItem(1);
-
-                        // Appelez la méthode pour mettre à jour la liste des voisins favoris
-                       // if (mPagerAdapter.getItem(position) instanceof FavoriteNeighbourFragment) {
-                         //   ((FavoriteNeighbourFragment) mPagerAdapter.getItem(position)).updateFavoriteNeighboursList();
-                        //}
+                        mApiService.setTabPosition(1);
+                        mNeighbours = mApiService.getAllFavorite();
+                        mAdapter.updateData(mNeighbours);
+                        mPagerAdapter.notifyDataSetChanged();
                         break;
-
                     default:
                         break;
                 }
 
+                Fragment neighbourFragmentSelector = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+                if (neighbourFragmentSelector instanceof NeighbourFragment) {
+                    ((NeighbourFragment) neighbourFragmentSelector).onResume();
+                }
 
+                Fragment favoriteNeighbourFragmentSelector = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+                if (favoriteNeighbourFragmentSelector instanceof FavoriteNeighbourFragment) {
+                    ((FavoriteNeighbourFragment) favoriteNeighbourFragmentSelector).onResume();
+                }
             }
+
+
+
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {

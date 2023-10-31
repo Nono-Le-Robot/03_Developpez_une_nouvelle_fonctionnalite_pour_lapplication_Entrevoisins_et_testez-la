@@ -3,6 +3,4 @@
     <string name="tab_neighbour_title">Mes Voisins</string>
     <string name="tab_favorites_title">Favoris</string>
     <string name="activity_new_neighbour">Ajouter un voisin</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -46,8 +46,7 @@ public class NeighbourDetailActivity extends AppCompatActivity {
 
             NeighbourApiService mApiService;
             mApiService = DI.getNeighbourApiService();
-            List<Neighbour> test = mApiService.getNeighbours();
-            String idToSave = String.valueOf(Integer.parseInt(neighbourId) - 1);
+            String idToSave = neighbourId;
             Neighbour selectedNeighbour = mApiService.getNeighbour(idToSave);
             List<Neighbour> allFavs = mApiService.getAllFavorite();
             Boolean currentFav = selectedNeighbour.getFavorite();
@@ -99,7 +98,6 @@ public class NeighbourDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
-
                 }
             });
 
@@ -115,6 +113,7 @@ public class NeighbourDetailActivity extends AppCompatActivity {
                          Toast.makeText(getApplicationContext(),  neighbourName + " a été retiré(e) à vos favoris", Toast.LENGTH_SHORT).show();
                      }
                      else{
+                         Log.d("id-vsn", selectedNeighbour.getName());
                          selectedNeighbour.addFavorite();
                          favIcon.setColorFilter(ContextCompat.getColor(favIcon.getContext(), R.color.yellow), PorterDuff.Mode.SRC_IN);
                          Toast.makeText(getApplicationContext(),  neighbourName + " a été ajouté(e) de vos favoris", Toast.LENGTH_SHORT).show();

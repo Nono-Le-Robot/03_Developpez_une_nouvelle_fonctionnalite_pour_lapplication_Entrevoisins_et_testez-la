@@ -80,7 +80,8 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 Intent intent = new Intent(view.getContext(), NeighbourDetailActivity.class);
 
                 // Transmettre les données du voisin à NeighbourDetailActivity
-                intent.putExtra("neighbourId", String.valueOf(selectedNeighbour.getId()));
+                intent.putExtra("neighbourId", String.valueOf(position));
+                Log.d("id-test",String.valueOf(position));
                 intent.putExtra("neighbourName", selectedNeighbour.getName());
                 intent.putExtra("neighbourAvatarUrl", selectedNeighbour.getAvatarUrl());
                 intent.putExtra("neighbourAddress", selectedNeighbour.getAddress());
